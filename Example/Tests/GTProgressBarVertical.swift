@@ -44,27 +44,27 @@ class GTProgressBarVertical: XCTestCase {
         expect(backgroundView.layer.cornerRadius).to(equal(7))
     }
     
-    func testShouldChangePositionAndHeightOfFillViewWhenUsingAnimateTo() {
+    func testShouldChangePositionAndHeightOfFillViewWhenUsinganimateBarOneTo() {
         let view = setupView() { view in
             view.displayLabel = false
             view.progress = 0.1
         }
         
-        view.animateTo(progress: 0.5)
+        view.animateBarOneTo(progress: 0.5)
         
         let fillView = view.subviews[backgroundViewIndex].subviews.first!
         let expectedFillViewFrame = CGRect(origin: CGPoint(x: 4, y: 50), size: CGSize(width:92, height: 46))
         expect(fillView.frame).to(equal(expectedFillViewFrame))
     }
     
-    func testCompletionHandlerFiredwWhenUsingAnimateTo() {
+    func testCompletionHandlerFiredwWhenUsinganimateBarOneTo() {
         let view = setupView() { view in
             view.displayLabel = false
             view.progress = 0.1
         }
         
         var completion = false
-        view.animateTo(progress: 0.5) {
+        view.animateBarOneTo(progress: 0.5) {
             completion = true
         }
         
@@ -80,7 +80,7 @@ class GTProgressBarVertical: XCTestCase {
             view.direction = .anticlockwise
         }
         
-        view.animateTo(progress: 0.5)
+        view.animateBarOneTo(progress: 0.5)
         
         let fillView = view.subviews[backgroundViewIndex].subviews.first!
         let expectedFillViewFrame = CGRect(origin: CGPoint(x: 4, y: 4), size: CGSize(width:92, height: 46))

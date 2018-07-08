@@ -25,6 +25,6 @@ class VerticalViewController: UIViewController {
 
     @IBAction func animateProgressBar(_ sender: Any) {
         let newProgress: CGFloat = progressBar.progress == 0.8 ? 0.1 : 0.8
-        progressBar.animateTo(progress: newProgress)
+        progressBar.animateBarOneTo(progress: newProgress)
     }
 }

@@ -397,14 +397,14 @@ class GTProgressBarTests: XCTestCase {
     
     func testShouldUpdateProgressWhenAnimatingProgress() {
         let view = setupView()
-        view.animateTo(progress: 0.69)
+        view.animateBarOneTo(progress: 0.69)
         
         expect(view.progress).to(equal(0.69))
     }
     
     func testShouldUpdateProgressLabeWhenAnimatingProgress() {
         let view = setupView()
-        view.animateTo(progress: 0.69)
+        view.animateBarOneTo(progress: 0.69)
         
         let label = view.subviews[0] as! UILabel
         expect(label.text).to(equal("69%"))

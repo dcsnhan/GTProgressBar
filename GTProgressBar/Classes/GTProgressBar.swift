@@ -12,9 +12,12 @@ public class GTProgressBar: UIView {
     private let minimumProgressBarFillHeight: CGFloat = 1
     private let backgroundView = NoClearView()
     private let fillView = NoClearView()
+    private let fillViewTwo = NoClearView()
+
     private let progressLabel = UILabel()
     private var _progress: CGFloat = 1
-    
+    private var _progressTwo: CGFloat = 1
+
     public var font: UIFont = UIFont.systemFont(ofSize: 12) {
         didSet {
             progressLabel.font = font
@@ -111,6 +114,15 @@ public class GTProgressBar: UIView {
     }
     
     @IBInspectable
+    public var barTwoFillColor: UIColor = UIColor.black {
+        didSet {
+            fillViewTwo.backgroundColor = barTwoFillColor
+            self.setNeedsLayout()
+        }
+    }
+    
+    
+    @IBInspectable
     public var barBorderWidth: CGFloat = 2 {
         didSet {
             backgroundView.layer.borderWidth = barBorderWidth
@@ -133,6 +145,20 @@ public class GTProgressBar: UIView {
         
         set {
             self._progress = min(max(newValue,0), 1)
+            
+            self.setNeedsLayout()
+            self.layoutIfNeeded()
+        }
+    }
+    
+    @IBInspectable
+    public var progressTwo: CGFloat {
+        get {
+            return self._progressTwo
+        }
+        
+        set {
+            self._progressTwo = min(max(newValue,0), 1)
             
             self.setNeedsLayout()
             self.layoutIfNeeded()
@@ -254,7 +280,11 @@ public class GTProgressBar: UIView {
         addSubview(backgroundView)
         
         fillView.backgroundColor = barFillColor
+        fillViewTwo.backgroundColor = barTwoFillColor
+
+        backgroundView.addSubview(fillViewTwo)
         backgroundView.addSubview(fillView)
+
     }
     
     public override func layoutSubviews() {
@@ -278,6 +308,9 @@ public class GTProgressBar: UIView {
 
         fillView.frame = frameCalculator.fillViewFrameFor(progress: _progress)
         fillView.layer.cornerRadius = cornerRadiusFor(view: fillView)
+        
+        fillViewTwo.frame = frameCalculator.fillViewFrameFor(progress: _progressTwo)
+        fillViewTwo.layer.cornerRadius = cornerRadiusFor(view: fillViewTwo)
     }
     
     private func createFrameCalculator() -> FrameCalculator {
@@ -297,7 +330,7 @@ public class GTProgressBar: UIView {
         progressLabel.text = "\(Int(_progress * 100))%"
     }
     
-    public func animateTo(progress: CGFloat, completion: (() -> Void)? = nil) {
+    public func animateBarOneTo(progress: CGFloat, completion: (() -> Void)? = nil) {
         let newProgress = min(max(progress,0), 1)
         let fillViewFrame = createFrameCalculator().fillViewFrameFor(progress: newProgress)
         let frameChange: () -> () = {
@@ -319,6 +352,32 @@ public class GTProgressBar: UIView {
                 animations: frameChange,
                 completion: { (finished) in 
                     completion?()
+            });
+        }
+    }
+    
+    public func animateBarTwoTo(progress: CGFloat, completion: (() -> Void)? = nil) {
+        let newProgress = min(max(progress,0), 1)
+        let fillViewFrame = createFrameCalculator().fillViewFrameFor(progress: newProgress)
+        let frameChange: () -> () = {
+            self.fillViewTwo.frame = fillViewFrame
+            self._progressTwo = newProgress
+            self.updateProgressLabelText()
+        }
+        
+        if #available(iOS 10.0, *) {
+            let animation = UIViewPropertyAnimator(duration: 0.8, curve: .easeInOut, animations: frameChange)
+            animation.addCompletion { (position) in
+                completion?()
+            }
+            animation.startAnimation()
+        } else {
+            UIView.animate(withDuration: 0.8,
+                           delay: 0,
+                           options: [UIViewAnimationOptions.curveEaseInOut],
+                           animations: frameChange,
+                           completion: { (finished) in
+                            completion?()
             });
         }
     }

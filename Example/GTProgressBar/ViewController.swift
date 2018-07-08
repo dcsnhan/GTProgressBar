@@ -17,14 +17,18 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        progressBar.progress = 1
+        progressBar.progress = 0.5
         progressBar.barBorderColor = UIColor(red:0.35, green:0.80, blue:0.36, alpha:1.0)
         progressBar.barFillColor = UIColor(red:0.35, green:0.80, blue:0.36, alpha:1.0)
         progressBar.barBackgroundColor = UIColor(red:0.77, green:0.93, blue:0.78, alpha:1.0)
-        progressBar.barBorderWidth = 1
-        progressBar.barFillInset = 2
+        progressBar.barBorderWidth = 0
+        progressBar.barFillInset = 0
+        progressBar.displayLabel = false
+        progressBar.cornerType = .square
         progressBar.labelTextColor = UIColor(red:0.35, green:0.80, blue:0.36, alpha:1.0)
         progressBar.progressLabelInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
+        progressBar.progressTwo = 0.6
+        progressBar.barTwoFillColor = .orange
         
         progressBarLargerFont.font = UIFont.boldSystemFont(ofSize: 18)
         progressBarLargerFont.barMaxHeight = 12
@@ -38,7 +42,7 @@ class ViewController: UIViewController {
 
     @IBAction func animateProgressBarButtonPressed(_ sender: Any) {
         let newProgress: CGFloat = animatedProgressBar.progress == 0.75 ? 0.45 : 0.75
-        animatedProgressBar.animateTo(progress: newProgress)
+        animatedProgressBar.animateBarOneTo(progress: newProgress)
     }
 }
 
